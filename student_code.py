@@ -23,9 +23,29 @@ class KnowledgeBase(object):
         Args:
             fact (Fact or Rule): Fact or Rule we're asserting in the format produced by read.py
         """
+        isFact = True
+        if (fact.name != 'fact'):
+            # not a fact....
+            isFact = False
+
+        contains = False
+        for f in self.facts:
+            if match(f.statement, fact.statement):
+                # We don't add this fact, because it is already in
+                contains = True
+
+        if ( (not contains) and isFact):
+            self.facts.append(fact)
+
         print("Asserting {!r}".format(fact))
-        
+
     def kb_ask(self, fact):
+
+        cur_match = []
+        for f in self.facts:
+            if match(f.statement, fact.statement):
+                cur_match.append(match(f.statement, fact.statement))
+        return cur_match
         """Ask if a fact is in the KB
 
         Args:
